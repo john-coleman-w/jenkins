@@ -1,0 +1,6 @@
+<% @domains.each do |domain|-%>
+Host <%= domain %>
+    StrictHostKeyChecking no
+    CheckHostIP no
+    UserKnownHostsFile /dev/null
+<% end -%>

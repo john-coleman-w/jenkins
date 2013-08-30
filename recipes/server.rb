@@ -50,6 +50,16 @@ ssh_dir = File.join(home_dir, ".ssh")
   end
 end
 
+template "#{File.join(ssh_dir, "config")}" do
+    source "jenkins_ssh_config.erb"
+    owner node['jenkins']['server']['user']
+    group node['jenkins']['server']['group']
+    mode '0700'
+    variables(
+        :domains => node['jenkins']['ssh_host_keys_ignore']
+    )
+end
+
 execute "ssh-keygen -f #{File.join(ssh_dir, "id_rsa")} -N ''" do
   user node['jenkins']['server']['user']
   group node['jenkins']['server']['group']

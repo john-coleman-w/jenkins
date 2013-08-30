@@ -26,7 +26,13 @@ include_recipe "runit"
 service_name = "jenkins-slave"
 slave_jar = "#{node['jenkins']['node']['home']}/slave.jar"
 
-group node['jenkins']['node']['user']
+auth_enabled = node['jenkins']['node']['auth_enabled']
+auth_ad_domain = node['jenkins']['node']['auth_ad_domain']
+auth_user = node['jenkins']['node']['auth_user']
+auth_password = node['jenkins']['node']['auth_password']
+interactive_enabled = node['jenkins']['node']['interactive_enabled']
+
+group node['jenkins']['node']['group']
 
 user node['jenkins']['node']['user'] do
   comment "Jenkins CI node (jnlp)"
@@ -49,6 +55,9 @@ jenkins_node node['jenkins']['node']['name'] do
   launcher     "jnlp"
   mode         node['jenkins']['node']['mode']
   availability node['jenkins']['node']['availability']
+  auth_enabled node['jenkins']['node']['auth_enabled']
+  auth_user    node['jenkins']['node']['auth_user']
+  auth_password node['jenkins']['node']['auth_password']
 end
 
 remote_file slave_jar do

@@ -32,6 +32,9 @@ attribute :availability, :equal_to => ["always", "demand"]
 attribute :in_demand_delay, :kind_of => Integer
 attribute :idle_delay, :kind_of => Integer
 attribute :env, :kind_of => Hash
+attribute :auth_enabled, :kind_of => [TrueClass, FalseClass]
+attribute :auth_user, :kind_of => String
+attribute :auth_password, :kind_of => String
 
 #XXX LWRPs cannot be subclassed?
 #case launcher

@@ -44,7 +44,14 @@ def action_create
     source "node_info.groovy"
   end
 
-  jenkins_cli "groovy node_info.groovy #{new_resource.name}" do
+  if node['jenkins']['node']['auth_enabled']
+      node_info_command = "groovy node_info.groovy #{new_resource.name} --username #{new_resource.auth_user} --password #{new_resource.auth_password}"
+      gscript_command = "groovy #{gscript} --username #{new_resource.auth_user} --password #{new_resource.auth_password}"
+  else
+      node_info_command = "groovy node_info.groovy #{new_resource.name}"
+      gscript_command = "groovy #{gscript}"
+  end
+  jenkins_cli "#{node_info_command}" do
     block do |stdout|
       current_node = JSON.parse(stdout)
       node_exists = current_node.keys.size > 0
@@ -58,7 +65,7 @@ def action_create
     end
   end
 
-  jenkins_cli "groovy #{gscript}" do
+  jenkins_cli "groovy #{gscript_command}" do
     only_if { ::File.exists?(gscript) }
   end
 

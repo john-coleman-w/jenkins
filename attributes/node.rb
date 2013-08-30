@@ -37,6 +37,12 @@ else
   default['jenkins']['node']['agent_type'] = "jnlp"
 end
 
+default['jenkins']['node']['auth_ad_domain'] = "AD"
+default['jenkins']['node']['auth_enabled'] = false
+default['jenkins']['node']['auth_user'] = "user"
+default['jenkins']['node']['auth_password'] = "password"
+default['jenkins']['node']['interactive_enabled'] = false
+
 default['jenkins']['node']['user'] = "jenkins-node"
 default['jenkins']['node']['group'] = "jenkins-node"
 default['jenkins']['node']['shell'] = "/bin/sh"

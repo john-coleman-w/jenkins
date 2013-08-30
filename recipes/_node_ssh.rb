@@ -21,6 +21,11 @@
 #
 
 include_recipe "java"
+auth_enabled = node['jenkins']['node']['auth_enabled']
+auth_ad_domain = node['jenkins']['node']['auth_ad_domain']
+auth_user = node['jenkins']['node']['auth_user']
+auth_password = node['jenkins']['node']['auth_password']
+interactive_enabled = node['jenkins']['node']['interactive_enabled']
 
 unless Chef::Config[:solo]
   unless node['jenkins']['server']['pubkey']
@@ -55,6 +60,16 @@ directory "#{node['jenkins']['node']['home']}/.ssh" do
   action :create
 end
 
+template "#{node['jenkins']['node']['home']}/.ssh/config" do
+    source "jenkins_ssh_config.erb"
+    owner node['jenkins']['node']['user']
+    group node['jenkins']['node']['group']
+    mode '0700'
+    variables(
+        :domains => node['jenkins']['ssh_host_keys_ignore']
+    )
+end
+
 file "#{node['jenkins']['node']['home']}/.ssh/authorized_keys" do
   content node['jenkins']['server']['pubkey']
   owner node['jenkins']['node']['user']
@@ -79,4 +94,7 @@ jenkins_node node['jenkins']['node']['name'] do
   password     node['jenkins']['node']['ssh_pass']
   private_key  node['jenkins']['node']['ssh_private_key']
   jvm_options  node['jenkins']['node']['jvm_options']
+  auth_enabled node['jenkins']['node']['auth_enabled']
+  auth_user    node['jenkins']['node']['auth_user']
+  auth_password node['jenkins']['node']['auth_password']
 end
